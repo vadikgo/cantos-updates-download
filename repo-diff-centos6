@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-local_dir="$HOME/Downloads/CentOS7.updates/x86_64/Packages"
-remote_dir="http://mirror.centos.org/centos/7/updates/x86_64/Packages/"
+local_dir="$HOME/Downloads/CentOS6.updates/x86_64/Packages"
+remote_dir="http://mirror.centos.org/centos/6/updates/x86_64/Packages/"
+mirror_dir="/Volumes/SBT-Gorbunov-VV"
 
 local=$(ls $local_dir | sort)
 remote=$(curl -s $remote_dir \
@@ -12,7 +13,7 @@ comm -2 -3 <(printf "%s\n" ${remote}) <(printf "%s\n" ${local})
 
 if [ "$1" == "-d" ]; then
   for file in $(comm -2 -3 <(printf "%s\n" ${remote}) <(printf "%s\n" ${local})); do
-    curl ${remote_dir}${file} -o ${local_dir}/${file}
-    cp -v ${local_dir}/${file} /Volumes/SBT-Gorbunov-VV/${file}
+    curl -C - ${remote_dir}${file} -o ${local_dir}/${file}
+    cp -v ${local_dir}/${file} ${mirror_dir}/${file}
   done
 fi
