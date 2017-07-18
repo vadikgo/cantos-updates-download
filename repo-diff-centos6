@@ -16,6 +16,7 @@ if [ "$1" == "-d" ]; then
     curl -C - ${remote_dir}${file} -o ${local_dir}/${file}
     cp -v ${local_dir}/${file} ${mirror_dir}/${file}
     docker run -it --rm -v ${local_dir}:/mnt centos:6 sh -c "yum install createrepo -y && createrepo --update /mnt"
+    mc mirror --force --remove  ${local_dir}/ minio1/files/CentOS6/Updates/
   done
 fi
 
